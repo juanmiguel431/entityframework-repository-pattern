@@ -7,16 +7,16 @@ namespace Queries.Persistence
     public class UnitOfWork : IUnitOfWork
     {
         private readonly PlutoContext _context;
+        private ICourseRepository _courses;
+        private IAuthorRepository _authors;
 
         public UnitOfWork(PlutoContext context)
         {
             _context = context;
-            Courses = new CourseRepository(_context);
-            Authors = new AuthorRepository(_context);
         }
 
-        public ICourseRepository Courses { get; private set; }
-        public IAuthorRepository Authors { get; private set; }
+        public ICourseRepository Courses => _courses ?? (_courses = new CourseRepository(_context));
+        public IAuthorRepository Authors => _authors ?? (_authors = new AuthorRepository(_context));
 
         public int Complete()
         {

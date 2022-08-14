@@ -7,11 +7,11 @@ using System.Linq.Expressions;
 
 namespace Queries.Persistence.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<TContext, TEntity> : IRepository<TEntity> where TEntity : class where TContext : DbContext
     {
-        protected readonly DbContext Context;
+        protected readonly TContext Context;
 
-        public Repository(DbContext context)
+        public Repository(TContext context)
         {
             Context = context;
         }

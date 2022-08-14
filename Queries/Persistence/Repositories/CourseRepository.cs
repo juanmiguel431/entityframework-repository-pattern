@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Queries.Persistence.Repositories
 {
-    public class CourseRepository : Repository<Course>, ICourseRepository
+    public class CourseRepository : Repository<PlutoContext, Course>, ICourseRepository
     {
         public CourseRepository(PlutoContext context) 
             : base(context)
@@ -15,20 +15,17 @@ namespace Queries.Persistence.Repositories
 
         public IEnumerable<Course> GetTopSellingCourses(int count)
         {
-
-            return PlutoContext.Courses.OrderByDescending(c => c.FullPrice).Take(count).ToList();
+            return Context.Courses.OrderByDescending(c => c.FullPrice).Take(count).ToList();
         }
 
         public IEnumerable<Course> GetCoursesWithAuthors(int pageIndex, int pageSize = 10)
         {
-            return PlutoContext.Courses
+            return Context.Courses
                 .Include(c => c.Author)
                 .OrderBy(c => c.Name)
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
         }
-
-        public PlutoContext PlutoContext => Context as PlutoContext;
     }
 }
